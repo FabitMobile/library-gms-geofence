@@ -3,52 +3,46 @@ package ru.fabit.gmsgeofence
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
-import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import kotlinx.coroutines.*
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class RecoveryGeofenceService : Service() {
+class RecoveryGeofenceWorker(
+    private val appContext: Context,
+    params: WorkerParameters
+) : CoroutineWorker(appContext, params) {
 
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-    private var job: Job? = null
-
-    override fun onBind(intent: Intent?): IBinder? = null
-
-    override fun onCreate() {
-        super.onCreate()
-        startForeground()
+    companion object {
+        const val TAG = "RecoveryGeofenceWorker"
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override suspend fun doWork(): Result {
         val recoveryManager = GmsGeofenceInstance.recoveryManager
-        job?.cancel()
-        try {
-            job = scope.launch {
-                    recoveryManager?.recovery {
-                        stopForeground(true)
-                        stopSelf()
-                    }
-                }
-        } catch (t: Throwable) {
-            if (t !is CancellationException) {
-                throw t
+        return try {
+            withContext(Dispatchers.IO) {
+                recoveryManager?.recovery {}
             }
+            Result.success()
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            Result.failure()
         }
-        return START_NOT_STICKY
     }
 
-    private fun startForeground() {
-        startForeground(
-            System.currentTimeMillis().hashCode(), makeNotification(
-                this,
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        return ForegroundInfo(
+            System.currentTimeMillis().hashCode(),
+            makeNotification(
+                appContext,
                 this::class.java.simpleName,
-                getString(GmsGeofenceInstance.config.recoveryForegroundNotificationChannelNameResId),
-                getString(GmsGeofenceInstance.config.recoveryForegroundNotificationContentTextResId),
-                getString(GmsGeofenceInstance.config.recoveryForegroundNotificationTitleResId)
+                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationChannelNameResId),
+                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationContentTextResId),
+                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationTitleResId)
             )
         )
     }
