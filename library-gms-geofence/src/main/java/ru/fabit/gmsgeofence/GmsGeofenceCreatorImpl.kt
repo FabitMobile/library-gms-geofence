@@ -82,13 +82,17 @@ class GmsGeofenceCreatorImpl(private val context: Context): GmsGeofenceCreator {
         }
         val geofences: MutableList<Geofence> = arrayListOf()
         list.forEach {
-            geofences.add(createGeofence(it))
+            if (checkRegion(it))
+                geofences.add(createGeofence(it))
         }
         return geofencingClient.addGeofences(
             getGeofencingRequest(geofences),
             getGeofencePendingIntent()
         )
     }
+
+    private fun checkRegion(geofence: GmsGeofence) =
+        geofence.radius > 0 && geofence.latitude in latitudeRange && geofence.longitude in longitudeRange
 
     private fun removeGeofences() {
         geofencingClient.removeGeofences(getGeofencePendingIntent())
@@ -100,5 +104,10 @@ class GmsGeofenceCreatorImpl(private val context: Context): GmsGeofenceCreator {
             Manifest.permission.ACCESS_FINE_LOCATION
         )
         return permissionState == PackageManager.PERMISSION_GRANTED
+    }
+
+    companion object {
+        private val latitudeRange = -90f..90f
+        private val longitudeRange = -180f..180f
     }
 }

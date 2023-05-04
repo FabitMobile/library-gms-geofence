@@ -13,9 +13,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <service
-            android:name="RecoveryGeofenceService"
-            android:exported="false" />
         <receiver
             android:name=".GmsGeofenceBroadcastReceiver"
             android:enabled="true"
