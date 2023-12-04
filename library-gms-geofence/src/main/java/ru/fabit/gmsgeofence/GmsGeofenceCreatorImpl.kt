@@ -15,16 +15,34 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import ru.fabit.gmsgeofence.entity.GmsGeofence
 
-class GmsGeofenceCreatorImpl(private val context: Context): GmsGeofenceCreator {
+class GmsGeofenceCreatorImpl(private val context: Context) : GmsGeofenceCreator {
+
+    private val locationProvider = LocationProvider(context)
 
     private var mGeofencePendingIntent: PendingIntent? = null
 
-    private val geofencingClient: GeofencingClient by lazy { LocationServices.getGeofencingClient(context) }
+    private val geofencingClient: GeofencingClient by lazy {
+        LocationServices.getGeofencingClient(
+            context
+        )
+    }
 
     override fun createGeofences(list: List<GmsGeofence>) {
         removeGeofences()
         if (list.isNotEmpty()) {
             addGeofences(list)
+            if (GmsGeofenceInstance.config.updateLocationInterval != 0L) {
+                val expirationMillis = list.maxBy { it.durationMillis }.durationMillis
+                locationProvider.subscribeBackgroundLocation(
+                    expirationMillis,
+                    GmsGeofenceInstance.config.updateLocationInterval
+                )
+            }
+        } else {
+            val serviceIntent =
+                Intent(context.applicationContext, UpdateLocationService::class.java)
+            locationProvider.unsubscribeBackgroundLocation()
+            context.stopService(serviceIntent)
         }
     }
 
@@ -49,9 +67,12 @@ class GmsGeofenceCreatorImpl(private val context: Context): GmsGeofenceCreator {
 
     private fun getTransitionTypes(): Int {
         var transitionTypes = 0
-        if (GmsGeofenceInstance.config.eventEnterEnabled) transitionTypes = transitionTypes or Geofence.GEOFENCE_TRANSITION_ENTER
-        if (GmsGeofenceInstance.config.eventExitEnabled) transitionTypes = transitionTypes or Geofence.GEOFENCE_TRANSITION_EXIT
-        if (GmsGeofenceInstance.config.eventDwellEnabled) transitionTypes = transitionTypes or Geofence.GEOFENCE_TRANSITION_DWELL
+        if (GmsGeofenceInstance.config.eventEnterEnabled) transitionTypes =
+            transitionTypes or Geofence.GEOFENCE_TRANSITION_ENTER
+        if (GmsGeofenceInstance.config.eventExitEnabled) transitionTypes =
+            transitionTypes or Geofence.GEOFENCE_TRANSITION_EXIT
+        if (GmsGeofenceInstance.config.eventDwellEnabled) transitionTypes =
+            transitionTypes or Geofence.GEOFENCE_TRANSITION_DWELL
         return transitionTypes
     }
 

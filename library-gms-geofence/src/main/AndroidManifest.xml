@@ -20,6 +20,12 @@
         <service
             android:name=".GmsGeofenceEventService"
             android:exported="false" />
+
+        <service
+            android:name=".UpdateLocationService"
+            android:foregroundServiceType="location"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
