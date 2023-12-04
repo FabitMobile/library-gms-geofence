@@ -12,5 +12,6 @@ data class GmsGeofenceConfig(
     val eventExitEnabled: Boolean = false,
     val eventEnterEnabled: Boolean = false,
     val eventDwellEnabled: Boolean = false,
-    val loiteringDelay: Int = 0
+    val loiteringDelay: Int = 0,
+    val updateLocationInterval: Long = 0
 )
