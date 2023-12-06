@@ -11,6 +11,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
+import java.lang.RuntimeException
 
 class GmsGeofenceEventService : Service() {
 
@@ -80,6 +81,7 @@ class GmsGeofenceEventService : Service() {
         intent?.also {
             val geofencingEvent = GeofencingEvent.fromIntent(intent)
             if (geofencingEvent?.hasError() == true) {
+                GmsGeofenceInstance.errorHandler?.handle(RuntimeException("geofencingEvent error ${geofencingEvent.errorCode}"))
                 stop()
             } else {
                 val geofenceTransition = geofencingEvent?.geofenceTransition

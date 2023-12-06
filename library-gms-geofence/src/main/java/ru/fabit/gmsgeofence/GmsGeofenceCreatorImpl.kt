@@ -31,6 +31,9 @@ class GmsGeofenceCreatorImpl(private val context: Context) : GmsGeofenceCreator 
         removeGeofences()
         if (list.isNotEmpty()) {
             addGeofences(list)
+                ?.addOnFailureListener {
+                    GmsGeofenceInstance.errorHandler?.handle(it)
+                }
             if (GmsGeofenceInstance.config.updateLocationInterval != 0L) {
                 val expirationMillis = list.maxBy { it.durationMillis }.durationMillis
                 locationProvider.subscribeBackgroundLocation(
