@@ -1,4 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'maven-publish'
+
 buildscript {
     ext.kotlinVersion = '1.7.10'
     ext.hiltVersion = '2.42'
@@ -16,7 +18,7 @@ buildscript {
     }
 }
 
-project.version = "0.4.0"
+//project.version = "0.5.0"
 
 task clean(type: Delete) {
     delete rootProject.buildDir
