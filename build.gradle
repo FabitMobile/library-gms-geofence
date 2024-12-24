@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply plugin: 'maven-publish'
+
 buildscript {
     ext.kotlinVersion = '1.7.10'
-    ext.hiltVersion = '2.42'
 
     repositories {
         google()
@@ -10,13 +11,10 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
+        classpath "com.android.tools.build:gradle:8.0.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
     }
 }
-
-project.version = "0.4.1"
 
 task clean(type: Delete) {
     delete rootProject.buildDir

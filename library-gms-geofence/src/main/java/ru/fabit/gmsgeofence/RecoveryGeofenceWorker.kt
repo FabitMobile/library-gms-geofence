@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
@@ -54,8 +55,7 @@ class RecoveryGeofenceWorker(
         contentText: String,
         contentTitle: String? = null
     ): Notification {
-        var channelId = ""
-        channelId = createNotificationChannel(context, serviceId, channelName)
+        val channelId = createNotificationChannel(context, serviceId, channelName)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
         return notificationBuilder
             .setOngoing(true)
@@ -72,11 +72,15 @@ class RecoveryGeofenceWorker(
         serviceId: String,
         channelName: String
     ): String {
-        val chan = NotificationChannel(serviceId, channelName, NotificationManager.IMPORTANCE_NONE)
-        chan.lightColor = Color.GREEN
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        service.createNotificationChannel(chan)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val chan =
+                NotificationChannel(serviceId, channelName, NotificationManager.IMPORTANCE_NONE)
+            chan.lightColor = Color.GREEN
+            chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            val service =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            service.createNotificationChannel(chan)
+        }
         return serviceId
     }
 }
