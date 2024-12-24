@@ -10,10 +10,8 @@ import android.content.pm.ServiceInfo
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.LocationAvailability
-import com.google.android.gms.location.LocationResult
 
 class UpdateLocationService : Service() {
 
@@ -31,7 +29,7 @@ class UpdateLocationService : Service() {
         intent?.let {
             if (LocationAvailability.hasLocationAvailability(intent)) {
                 val locationAvailability = LocationAvailability.extractLocationAvailability(intent)
-                if (!locationAvailability.isLocationAvailable) {
+                if (locationAvailability == null || !locationAvailability.isLocationAvailable) {
                     stop()
                 }
             }
@@ -79,8 +77,7 @@ class UpdateLocationService : Service() {
         contentText: String,
         contentTitle: String? = null
     ): Notification {
-        var channelId = ""
-        channelId = createNotificationChannel(context, serviceId, channelName)
+        val channelId: String = createNotificationChannel(context, serviceId, channelName)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
         val category = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             Notification.CATEGORY_NAVIGATION
@@ -102,11 +99,15 @@ class UpdateLocationService : Service() {
         serviceId: String,
         channelName: String
     ): String {
-        val chan = NotificationChannel(serviceId, channelName, NotificationManager.IMPORTANCE_HIGH)
-        chan.lightColor = Color.GREEN
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        val service = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        service.createNotificationChannel(chan)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val chan =
+                NotificationChannel(serviceId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            chan.lightColor = Color.GREEN
+            chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+            val service =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            service.createNotificationChannel(chan)
+        }
         return serviceId
     }
 }

@@ -1,6 +1,7 @@
 package ru.fabit.gmsgeofence
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
@@ -8,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
@@ -127,7 +129,19 @@ class GmsGeofenceCreatorImpl(private val context: Context) : GmsGeofenceCreator 
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
-        return permissionState == PackageManager.PERMISSION_GRANTED
+        return permissionState == PackageManager.PERMISSION_GRANTED && checkBackgroundLocationPermissionGranted()
+    }
+
+    private fun checkBackgroundLocationPermissionGranted(): Boolean {
+        // Background permissions didn't exit prior to Q, so it's approved by default.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return true
+        }
+
+        return ContextCompat.checkSelfPermission(
+            context,
+            ACCESS_BACKGROUND_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     companion object {
