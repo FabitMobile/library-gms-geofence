@@ -51,9 +51,9 @@ class UpdateLocationService : Service() {
                 System.currentTimeMillis().hashCode(), makeNotification(
                     this,
                     this::class.java.simpleName,
-                    getString(GmsGeofenceInstance.config.foregroundNotificationChannelNameResId),
-                    getString(GmsGeofenceInstance.config.foregroundNotificationContentTextResId),
-                    getString(GmsGeofenceInstance.config.foregroundNotificationTitleResId)
+                    getString(R.string.geofence_foreground_notification_channel_name),
+                    getString(R.string.geofence_foreground_notification_text_content),
+                    getString(R.string.geofence_foreground_notification_title)
                 ),
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
             )
@@ -62,9 +62,9 @@ class UpdateLocationService : Service() {
                 System.currentTimeMillis().hashCode(), makeNotification(
                     this,
                     this::class.java.simpleName,
-                    getString(GmsGeofenceInstance.config.foregroundNotificationChannelNameResId),
-                    getString(GmsGeofenceInstance.config.foregroundNotificationContentTextResId),
-                    getString(GmsGeofenceInstance.config.foregroundNotificationTitleResId)
+                    getString(R.string.geofence_foreground_notification_channel_name),
+                    getString(R.string.geofence_foreground_notification_text_content),
+                    getString(R.string.geofence_foreground_notification_title)
                 )
             )
         }
