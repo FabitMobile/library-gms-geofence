@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="geofence_foreground_notification_title">Measuring distance to the parking area</string>
-    <string name="geofence_foreground_notification_text_content">Measuring distance to the parking area</string>
-    <string name="geofence_foreground_notification_channel_name">Measuring distance to the parking area</string>
-    <string name="recovery_geofence_foreground_notification_title">Restoring locations of active parking sessions</string>
-    <string name="recovery_geofence_foreground_notification_text_content">Restoring locations of active parking sessions</string>
+    <string name="geofence_foreground_notification_title">Measuring distance to the geofence</string>
+    <string name="geofence_foreground_notification_text_content">Measuring distance to the geofence</string>
+    <string name="geofence_foreground_notification_channel_name">Measuring distance to the geofence</string>
+    <string name="recovery_geofence_foreground_notification_title">Restoring locations of active geofences</string>
+    <string name="recovery_geofence_foreground_notification_text_content">Restoring locations of active geofences</string>
 </resources>
