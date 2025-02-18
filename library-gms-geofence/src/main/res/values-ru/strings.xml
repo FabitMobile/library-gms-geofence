@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="geofence_foreground_notification_title">Проверка дальности до парковки</string>
+    <string name="geofence_foreground_notification_text_content">Проверка дальности до парковки</string>
+    <string name="geofence_foreground_notification_channel_name">Проверка дальности до парковки</string>
+    <string name="recovery_geofence_foreground_notification_title">Восстановление геопозиций активных парковок</string>
+    <string name="recovery_geofence_foreground_notification_text_content">Восстановление геопозиций активных парковок</string>
+</resources>

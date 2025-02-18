@@ -41,9 +41,9 @@ class RecoveryGeofenceWorker(
             makeNotification(
                 appContext,
                 this::class.java.simpleName,
-                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationChannelNameResId),
-                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationContentTextResId),
-                appContext.getString(GmsGeofenceInstance.config.recoveryForegroundNotificationTitleResId)
+                appContext.getString(R.string.geofence_foreground_notification_channel_name),
+                appContext.getString(R.string.recovery_geofence_foreground_notification_text_content),
+                appContext.getString(R.string.recovery_geofence_foreground_notification_title)
             )
         )
     }

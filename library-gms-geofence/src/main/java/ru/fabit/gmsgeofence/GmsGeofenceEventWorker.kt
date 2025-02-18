@@ -33,9 +33,9 @@ class GmsGeofenceEventWorker(
             makeNotification(
                 context,
                 this::class.java.simpleName,
-                context.getString(GmsGeofenceInstance.config.foregroundNotificationChannelNameResId),
-                context.getString(GmsGeofenceInstance.config.foregroundNotificationContentTextResId),
-                context.getString(GmsGeofenceInstance.config.foregroundNotificationTitleResId)
+                context.getString(R.string.geofence_foreground_notification_channel_name),
+                context.getString(R.string.geofence_foreground_notification_text_content),
+                context.getString(R.string.geofence_foreground_notification_title)
             )
         )
     }
