@@ -47,7 +47,7 @@ class GmsGeofenceBroadcastReceiver : BroadcastReceiver() {
             .build()
 
         RemoteWorkManager.getInstance(context).enqueueUniqueWork(
-            RecoveryGeofenceWorker.TAG,
+            GmsGeofenceEventWorker.TAG,
             ExistingWorkPolicy.KEEP,
             workRequest
         )
